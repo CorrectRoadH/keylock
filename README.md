@@ -1,8 +1,10 @@
 English | [简体中文](./README.zh.md)
 
-KeyLock is a simple library that allows you to lock and unlock using a string key.
+KeyLock is a lock library that allows you to lock and unlock using a string key.
 
 The KeyLock usage be used in cache layer.
+
+For example, in order to prevent cache breakdown, only one process is allowed to query data from the database, which can be locked with KeyLock.
 
 # Usage
 
