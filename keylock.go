@@ -57,7 +57,21 @@ func (d *DistributedLock) Lock(key string) error {
 	locker := redislock.New(d.client)
 
 	ctx := context.Background()
-	lock, err := locker.Obtain(ctx, key, 999999*time.Hour, nil)
+	var err error
+	var lock *redislock.Lock
+	for {
+		lock, err = locker.Obtain(ctx, key, 1*time.Hour, nil)
+		if err == nil {
+			break
+		}
+		if err == redislock.ErrNotObtained {
+			fmt.Println("重试")
+			time.Sleep(1 * time.Second)
+			continue
+		}
+		return err
+	}
+
 	d.lockMap.Store(key, lock)
 	return err
 }
@@ -68,7 +82,12 @@ func (d *DistributedLock) Unlock(key string) error {
 		return fmt.Errorf("lock not found")
 	}
 
+	lockInstance := lock.(*redislock.Lock)
 	ctx := context.Background()
-	err := lock.(*redislock.Lock).Release(ctx)
+	_, err := lockInstance.TTL(ctx)
+	if err != nil {
+		return err
+	}
+	err = lockInstance.Release(ctx)
 	return err
 }

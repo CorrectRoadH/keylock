@@ -11,12 +11,15 @@ import (
 type IncServer struct {
 	keylock keylock.KeyLock
 	count   int
+	t       *testing.T
 }
 
 func (s *IncServer) Inc() {
-	s.keylock.Lock("inc")
+	err := s.keylock.Lock("inc")
+	assert.Nil(s.t, err)
 	s.count++
-	s.keylock.Unlock("inc")
+	err = s.keylock.Unlock("inc")
+	assert.Nil(s.t, err)
 }
 
 func TestSingleThreadCount(t *testing.T) {
@@ -26,6 +29,7 @@ func TestSingleThreadCount(t *testing.T) {
 	server := IncServer{
 		keylock: lock,
 		count:   0,
+		t:       t,
 	}
 
 	for i := 0; i < 10000; i++ {
@@ -40,18 +44,23 @@ type IncTwoServer struct {
 	keylock keylock.KeyLock
 	count   int
 	count2  int
+	t       *testing.T
 }
 
 func (s *IncTwoServer) Inc1() {
-	s.keylock.Lock("inc")
+	err := s.keylock.Lock("inc")
+	assert.NoError(s.t, err)
 	s.count++
-	s.keylock.Unlock("inc")
+	err = s.keylock.Unlock("inc")
+	assert.NoError(s.t, err)
 }
 
 func (s *IncTwoServer) Inc2() {
-	s.keylock.Lock("inc2")
+	err := s.keylock.Lock("inc2")
+	assert.NoError(s.t, err)
 	s.count2++
-	s.keylock.Unlock("inc2")
+	err = s.keylock.Unlock("inc2")
+	assert.NoError(s.t, err)
 }
 
 func TestMultipleThreadCount(t *testing.T) {
@@ -63,6 +72,7 @@ func TestMultipleThreadCount(t *testing.T) {
 		keylock: lock,
 		count:   0,
 		count2:  0,
+		t:       t,
 	}
 
 	for i := 0; i < 10000; i++ {
