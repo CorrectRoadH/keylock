@@ -48,10 +48,10 @@ type IncTwoServer struct {
 }
 
 func (s *IncTwoServer) Inc1() {
-	err := s.keylock.Lock("inc")
+	err := s.keylock.Lock("inc1")
 	assert.NoError(s.t, err)
 	s.count++
-	err = s.keylock.Unlock("inc")
+	err = s.keylock.Unlock("inc1")
 	assert.NoError(s.t, err)
 }
 

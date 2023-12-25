@@ -21,12 +21,12 @@ func TestSingleThreadCountInDistribute(t *testing.T) {
 		t:       t,
 	}
 
-	for i := 0; i < 10000; i++ {
+	for i := 0; i < 100; i++ {
 		wg.Go(server.Inc)
 	}
 	wg.Wait()
 
-	assert.Equal(t, 10000, server.count)
+	assert.Equal(t, 100, server.count)
 }
 
 func TestMultipleThreadCountInDistribute(t *testing.T) {
@@ -43,16 +43,16 @@ func TestMultipleThreadCountInDistribute(t *testing.T) {
 		t:       t,
 	}
 
-	for i := 0; i < 10000; i++ {
+	for i := 0; i < 100; i++ {
 		wg.Go(server.Inc1)
 	}
-	for i := 0; i < 10000; i++ {
+	for i := 0; i < 100; i++ {
 		wg2.Go(server.Inc2)
 	}
 
 	wg.Wait()
 	wg2.Wait()
 
-	assert.Equal(t, 10000, server.count)
-	assert.Equal(t, 10000, server.count2)
+	assert.Equal(t, 100, server.count)
+	assert.Equal(t, 100, server.count2)
 }

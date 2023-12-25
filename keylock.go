@@ -66,7 +66,6 @@ func (d *DistributedLock) Lock(key string) error {
 		}
 		if err == redislock.ErrNotObtained {
 			fmt.Println("重试")
-			time.Sleep(1 * time.Second)
 			continue
 		}
 		return err
