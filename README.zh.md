@@ -14,8 +14,8 @@ KeyLock 是一个锁，可以使用字符串键进行锁定和解锁。
 keylock,err := keylock.New()
 // handle err
 
-keylock.Lock(req.Id)
-defer keylock.Unlock(req.Id)
+keylock.Lock("12345")
+defer keylock.Unlock("12345")
 
 // do something
 ```

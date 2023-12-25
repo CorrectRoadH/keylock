@@ -14,8 +14,8 @@ For example, in order to prevent cache breakdown, only one process is allowed to
 keylock,err := keylock.New()
 // handle err
 
-keylock.Lock(req.Id)
-defer keylock.Unlock(req.Id)
+keylock.Lock("12345")
+defer keylock.Unlock("12345")
 
 // do something
 ```
