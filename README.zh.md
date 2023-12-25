@@ -7,9 +7,20 @@ KeyLock 是一个锁，可以使用字符串键进行锁定和解锁。
 比如为了防止缓存击穿，只允许有一个进程去数据库查询数据，这时就可以用 KeyLock 来锁定。
 
 # Usage
-
-## Monolithic Application
 `go get github.com/CorrectRoadH/keylock`
+
+## Simple Usage
+```golang
+keylock,err := keylock.New()
+// handle err
+
+keylock.Lock(req.Id)
+defer keylock.Unlock(req.Id)
+
+// do something
+```
+## Monolithic Application
+
 ```golang
 type UserService struct {
 	store *store.UserStore

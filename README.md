@@ -7,9 +7,20 @@ The KeyLock usage be used in cache layer.
 For example, in order to prevent cache breakdown, only one process is allowed to query data from the database, which can be locked with KeyLock.
 
 # Usage
+`go get github.com/CorrectRoadH/keylock`
+
+## Simple Usage
+```golang
+keylock,err := keylock.New()
+// handle err
+
+keylock.Lock(req.Id)
+defer keylock.Unlock(req.Id)
+
+// do something
+```
 
 ## Monolithic Application
-`go get github.com/CorrectRoadH/keylock`
 ```golang
 type UserService struct {
 	store *store.UserStore
